@@ -16,7 +16,7 @@ Base = declarative_base()
 
 class Products(Base):
     __tablename__ = "products"
-    
+
     uniq_id = Column(String, primary_key=True, index=True)
     product_name = Column(String, unique=True, index=True)
     amazon_category_and_sub_category = Column(String)
@@ -32,9 +32,9 @@ engine = create_engine('sqlite:///products.db', echo=True)
 conn = engine.connect()
 
 # Test
-stmt = text ( "SELECT * from products limit 5;" )
-result = conn.execute(stmt)
-print(result.fetchall())
+#stmt = text ( "SELECT * from products limit 5;" )
+#result = conn.execute(stmt)
+#print(result.fetchall())
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -63,7 +63,7 @@ def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
     return products
 
 @api.get("/products/{uniq_id}")
-def search_product(uniq_id: int, db: Session = Depends(get_db)):
+def search_product(uniq_id: String, db: Session = Depends(get_db)):
     product = get_product(db, product_uniq_id=uniq_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
