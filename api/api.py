@@ -8,9 +8,11 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine, text, inspect
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import cast, select
 
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.sqltypes import VARCHAR, String
 
 Base = declarative_base()
 
@@ -63,7 +65,7 @@ def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
     return products
 
 @api.get("/products/{uniq_id}")
-def search_product(uniq_id: String, db: Session = Depends(get_db)):
+def search_product(uniq_id: int, db: Session = Depends(get_db)):
     product = get_product(db, product_uniq_id=uniq_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
