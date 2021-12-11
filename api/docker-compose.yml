@@ -1,0 +1,8 @@
+version: '2.2'
+services:
+  api :
+    image: 24241702/products_amazone_docker_image
+    container_name : api_products_amazone_container
+    ports: 
+      - "8000:8000"
+      
