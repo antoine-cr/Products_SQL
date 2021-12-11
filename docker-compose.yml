@@ -1,0 +1,8 @@
+version: '2.2'
+services:
+  api :
+    image: 24241702/products_sql
+    container_name : api_container
+    ports: 
+      - "8000:8000"
+      
