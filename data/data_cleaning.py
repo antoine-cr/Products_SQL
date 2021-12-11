@@ -25,5 +25,5 @@ df['price']=df['price'].astype(float)
 #Création d'un nouveau dataframe ne contenant que des variables pertinentes pour la recherche
 data = df[['uniq_id','product_name','amazon_category_and_sub_category', 'manufacturer','price','number_available_in_stock','number_of_reviews','number_of_answered_questions','average_rating']].copy()
 
-df.to_csv('./files/amazon_co-ecommerce_sample.csv', header=True, index=False, sep=';')
+data.to_csv('./files/amazon_co-ecommerce_sample.csv', header=True, index=False, sep=';')
 

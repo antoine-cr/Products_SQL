@@ -16,6 +16,7 @@ Base = declarative_base()
 
 class Products(Base):
     __tablename__ = "products"
+    
     uniq_id = Column(String, primary_key=True, index=True)
     product_name = Column(String, unique=True, index=True)
     amazon_category_and_sub_category = Column(String)
@@ -27,13 +28,13 @@ class Products(Base):
     average_rating = Column(String)
 
 #Création de la BDD
-engine = create_engine('sqlite:///transfers.db', echo=True)
+engine = create_engine('sqlite:///products.db', echo=True)
 conn = engine.connect()
 
 # Test
-# stmt = text ( "SELECT * from transfers inner join players on players.id=transfers.player_id limit 5;" )
-# result = conn.execute(stmt)
-# print(result.fetchall())
+stmt = text ( "SELECT * from products limit 5;" )
+result = conn.execute(stmt)
+print(result.fetchall())
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -58,12 +59,12 @@ def get_products(db: Session, skip: int = 0, limit: int = 50):
 
 @api.get("/products/")
 def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    players = get_product(db, skip=skip, limit=limit)
-    return players
+    products = get_products(db, skip=skip, limit=limit)
+    return products
 
 @api.get("/products/{uniq_id}")
 def search_product(uniq_id: int, db: Session = Depends(get_db)):
-    product = get_products(db, product_uniq_id=uniq_id)
+    product = get_product(db, product_uniq_id=uniq_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product
