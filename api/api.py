@@ -63,7 +63,7 @@ def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
     return products
 
 @api.get("/products/{uniq_id}")
-def search_product(uniq_id: String, db: Session = Depends(get_db)):
+def search_product(uniq_id: int, db: Session = Depends(get_db)):
     product = get_product(db, product_uniq_id=uniq_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
