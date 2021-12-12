@@ -38,7 +38,7 @@ if __name__ == "__main__":
     engine = create_engine('sqlite:///products.db')
     Base.metadata.create_all(engine)
 
-    #Create the session
+    #Création de la session
     session = sessionmaker()
     session.configure(bind=engine)
     s = session()

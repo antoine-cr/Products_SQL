@@ -1,6 +1,6 @@
 from typing import List
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, AnyStrMinLengthError, types
 from fastapi import FastAPI, Depends, Header, HTTPException, status
 
 from sqlalchemy.orm import Session, sessionmaker
@@ -51,8 +51,11 @@ security = HTTPBasic()
 def get_product(db: Session, product_uniq_id: int):
     return db.query(Products).filter(Products.id == product_uniq_id).first()
 
-def get_product_name(db: Session, product_product_name: STRINGTYPE, limit: int =100):
+def get_product_name(db: Session, product_product_name: str, limit: int =100):
     return db.query(Products).filter(Products.product_name == product_product_name).limit(limit).all()
+
+def get_product_manufacturer(db: Session, product_manufacturer: str, limit: int =100):
+    return db.query(Products).filter(Products.manufacturer == product_manufacturer).limit(limit).all()
 
 def get_product_rating(db: Session, product_average_rating: float, limit: int =100):
     return db.query(Products).filter(Products.average_rating == product_average_rating).limit(limit).all()
@@ -76,8 +79,15 @@ def search_product(uniq_id: float, db: Session = Depends(get_db)):
     return product
 
 @api.get("/products_name/{product_name}")
-def search_product_name(product_name: float, db: Session = Depends(get_db)):
+def search_product_name(product_name: str, db: Session = Depends(get_db)):
     product = get_product_name(db, product_product_name=product_name)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
+
+@api.get("/products_manufacturer/{manufacturer}")
+def search_product_manufacturer(manufacturer: str, db: Session = Depends(get_db)):
+    product = get_product_manufacturer(db, product_manufacturer=manufacturer)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
     return product

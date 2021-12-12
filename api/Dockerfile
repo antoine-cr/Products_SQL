@@ -8,10 +8,10 @@ COPY ./ /api/
 WORKDIR /api/
 
 # On met à jour et installe uvicorn
-RUN apt-get update && pip3 install -r requirements.txt
+RUN apt-get update && pip3 install --upgrade pip && pip3 install -r requirements.txt
 
 # définit le port que l'on met à disposition
 EXPOSE 8000
 
 # On exécute uvicorn ... au local
-CMD uvicorn api:api --host 0.0.0.0
+CMD ./integration_data.sh && uvicorn api:api --host 0.0.0.0
