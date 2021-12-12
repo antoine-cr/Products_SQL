@@ -18,10 +18,10 @@ http://0.0.0.0:8000/products_rating/{average_rating} pour trouver un ou des prod
 
 http://0.0.0.0:8000/products_price/{price} pour trouver un ou des produit(s) à un prix recherché
 
-## Routes POST :
+## Route POST :
 
 http://0.0.0.0:8000/products pour insérer un nouveau produit dans la bdd
-
+Il faut respecter ce schéma :
   {
         "product_name": String,
         "amazon_category_and_sub_category": String,
