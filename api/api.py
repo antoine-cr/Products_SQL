@@ -48,24 +48,32 @@ def get_db():
 security = HTTPBasic()
 
 
+# Définition des fonctions
 def get_product(db: Session, product_uniq_id: int):
+    ''' permet de récupérer l'uniq_id du produit.'''
     return db.query(Products).filter(Products.uniq_id == product_uniq_id).first()
 
 def get_product_name(db: Session, product_product_name: str, limit: int =100):
+    ''' permet de récupérer le nom du produit.'''
     return db.query(Products).filter(Products.product_name == product_product_name).limit(limit).all()
 
 def get_product_manufacturer(db: Session, product_manufacturer: str, limit: int =100):
+    ''' permet de récupérer le fabricant du produit.'''
     return db.query(Products).filter(Products.manufacturer == product_manufacturer).limit(limit).all()
 
 def get_product_rating(db: Session, product_average_rating: float, limit: int =100):
+    ''' permet de récupérer l'évaluation du produit.'''
     return db.query(Products).filter(Products.average_rating == product_average_rating).limit(limit).all()
 
 def get_product_price(db: Session, product_price: float, limit: int =100):
+    ''' permet de récupérer le prix du produit.'''
     return db.query(Products).filter(Products.price == product_price).limit(limit).all()
 
 def get_products(db: Session, skip: int = 0, limit: int = 50):
+    ''' permet de limiter l'id du produit.'''
     return db.query(Products).offset(skip).limit(limit).all()
 
+# Création des routes
 @api.get("/products/")
 def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     products = get_products(db, skip=skip, limit=limit)
