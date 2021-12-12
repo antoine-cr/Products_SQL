@@ -1,5 +1,5 @@
 # Products_SQL
-Ce projet a pour but la mise en place d'une base de données SQLAlchemy et d'une API créee avec FastAPI contenant des produits d'amazon co-ecommerce.
+Ce projet a pour but la mise en place d'une base de données SQLAlchemy et la création d'une API contenant des produits d'amazon co-ecommerce à l'aide de FastAPI.
 
 ## Démarrage API
 Se rendre sur le répertoire /api et exécuter la commande docker-compose up (chargement des données + création de l'api)
