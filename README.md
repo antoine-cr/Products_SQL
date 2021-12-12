@@ -21,7 +21,9 @@ http://0.0.0.0:8000/products_price/{price} pour trouver un ou des produit(s) à 
 ## Route POST :
 
 http://0.0.0.0:8000/products pour insérer un nouveau produit dans la bdd
+
 Il faut respecter ce schéma :
+
   {
         "product_name": String,
         "amazon_category_and_sub_category": String,
