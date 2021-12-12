@@ -11,8 +11,12 @@ from sqlalchemy import Column, Integer, String, ForeignKey
 
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.functions import concat
 from sqlalchemy.sql.sqltypes import ARRAY, FLOAT, VARCHAR, String, Integer
 from sqlalchemy.sql.type_api import STRINGTYPE
+from sqlalchemy import insert
+
+from model import ProductData
 
 Base = declarative_base()
 
@@ -22,7 +26,7 @@ class Products(Base):
     uniq_id = Column(String, primary_key=True, index=True)
     product_name = Column(String, unique=True, index=True)
     amazon_category_and_sub_category = Column(String)
-    manufacturer = Column(Integer)
+    manufacturer = Column(String)
     price = Column(String)
     number_available_in_stock = Column(String)
     number_of_reviews = Column(Integer)
@@ -46,8 +50,7 @@ def get_db():
         db.close()
 
 security = HTTPBasic()
-
-
+    
 def get_product(db: Session, product_uniq_id: int):
     return db.query(Products).filter(Products.uniq_id == product_uniq_id).first()
 
@@ -65,6 +68,23 @@ def get_product_price(db: Session, product_price: float, limit: int =100):
 
 def get_products(db: Session, skip: int = 0, limit: int = 50):
     return db.query(Products).offset(skip).limit(limit).all()
+
+def insert_product(db: Session, data: ProductData):
+    id_new = int(db.execute("SELECT MAX(id) from product").fetchall()[0][0])+1
+    if(db.execute(("SELECT uniq_id from product WHERE uniq_id = '"+data.uniq_id+"'")).fetchall() == []):
+        new_Product = Products(id=id_new, uniq_id=data.uniq_id, product_name=data.product_name, amazon_category_and_sub_category=data.amazon_category_and_sub_category, manufacturer=data.manufacturer, price=data.price, number_available_in_stock=data.number_available_in_stock, number_of_reviews=data.number_of_reviews, number_of_answered_questions=data.number_of_answered_questions, average_rating=data.average_rating)
+        db.add(new_Product)
+        db.commit()
+        print(id_new)
+    else:
+        raise HTTPException(status_code=404, detail="Product already exists with uniq_id")
+    return db.query(Products).filter(Products.id == id_new).all()
+
+def delete_product(db: Session, product_product_name: str, limit: int =100):
+    del_Product = db.query(Products).filter(Products.product_name == product_product_name).limit(limit).all()
+    db.delete(del_Product)
+    db.commit()
+    return db.query(Products).filter(Products.id == del_Product.id).first()
 
 @api.get("/products/")
 def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -104,4 +124,9 @@ def search_product_price(price: float, db: Session = Depends(get_db)):
     product = get_product_price(db, product_price=price)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")
+    return product
+
+@api.post("/products")
+def create_product(data: ProductData, db: Session = Depends(get_db)):
+    product = insert_product(db, data)
     return product

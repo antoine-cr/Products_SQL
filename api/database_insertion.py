@@ -25,7 +25,7 @@ class Product(Base):
     uniq_id = Column(String, primary_key=True, index=True)
     product_name = Column(String, unique=True, index=True)
     amazon_category_and_sub_category = Column(String)
-    manufacturer = Column(Integer)
+    manufacturer = Column(String)
     price = Column(String)
     number_available_in_stock = Column(String)
     number_of_reviews = Column(Integer)
