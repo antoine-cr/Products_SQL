@@ -24,7 +24,7 @@ http://0.0.0.0:8000/products pour insérer un nouveau produit dans la bdd
 
 Il faut respecter ce schéma :
 
-  {
+        {
   
         "product_name": String,
         
@@ -44,4 +44,4 @@ Il faut respecter ce schéma :
         
         "number_of_answered_questions": Integer
         
-    }
+        }
