@@ -49,7 +49,7 @@ security = HTTPBasic()
 
 
 def get_product(db: Session, product_uniq_id: int):
-    return db.query(Products).filter(Products.id == product_uniq_id).first()
+    return db.query(Products).filter(Products.uniq_id == product_uniq_id).first()
 
 def get_product_name(db: Session, product_product_name: str, limit: int =100):
     return db.query(Products).filter(Products.product_name == product_product_name).limit(limit).all()
@@ -72,7 +72,7 @@ def search_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_d
     return products
 
 @api.get("/products/{uniq_id}")
-def search_product(uniq_id: float, db: Session = Depends(get_db)):
+def search_product(uniq_id: str, db: Session = Depends(get_db)):
     product = get_product(db, product_uniq_id=uniq_id)
     if product is None:
         raise HTTPException(status_code=404, detail="Product not found")

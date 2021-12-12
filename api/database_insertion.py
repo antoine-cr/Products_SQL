@@ -46,27 +46,3 @@ if __name__ == "__main__":
     with open("amazon_co-ecommerce_sample.csv", 'r') as file:
         data_df = pd.read_csv(file, delimiter=";")
         data_df.to_sql('product', con=engine, index=True, index_label='id', if_exists='replace')
-
-    # try:
-    #     file_name = "amazon_co-ecommerce_sample.csv"
-    #     data = Load_Data(file_name)
-
-    #     for i in data:
-    #         record = Product(**{
-    #             'uniq_id' : i[0],
-    #             'product_name' : i[1],
-    #             'amazon_category_and_sub_category' : i[2],
-    #             'manufacturer' : i[3],
-    #             'price' : i[4],
-    #             'number_available_in_stock' : i[5],
-    #             'number_of_reviews' : i[6],
-    #             'number_of_answered_questions' : i[7],
-    #             'average_rating' : i[8]
-    #         })
-    #         s.add(record)
-
-    #     s.commit()
-    # except:
-    #     s.rollback()
-    # finally:
-    #     s.close()
